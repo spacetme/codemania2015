@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<title>Web Audio Example</title>
+
+<p><audio src="song.ogg" controls loop></audio></p>
+<p>
+  <label><input type="checkbox" id="activated"> Activate Filter</label>
+</p>
+
+<script>
+var ctx = new AudioContext()
+var audio = document.querySelector('audio')
+var src = ctx.createMediaElementSource(audio)
+var filter = ctx.createBiquadFilter()
+filter.type = 'bandpass'
+
+var checkbox = document.querySelector('#activated')
+
+function update() {
+  if (checkbox.checked) {
+    src.disconnect()
+    src.connect(filter)
+    filter.connect(ctx.destination)
+  } else {
+    src.disconnect()
+    src.connect(ctx.destination)
+  }
+}
+update()
+checkbox.onchange = update
+
+window.onmousemove = function(e) {
+  filter.frequency.value = e.clientX * 5
+  filter.Q.value = e.clientY / 50
+}
+</script>
+
+<hr>
+
+<p>Music: <strong><a href="https://soundcloud.com/o_ooooo/by-my-side-ambient-house">BY☆MY☆SIDE (Ambient House Mix)</a></strong> by <a href="https://soundcloud.com/o_ooooo">flicknote</a> (Thai Pangsakulyanont)</p>
